@@ -32,7 +32,28 @@ class ModelArgs:
         if self.vocab_size % self.pad_vocab_size_multiple != 0:
             self.vocab_size += self.pad_vocab_size_multiple - self.vocab_size % self.pad_vocab_size_multiple
 
+class Mamba(nn.Module):
+    def __init__(self, args: ModelArgs):
+        super().__init__()
+        self.args = args
+        self.embedding = nn.Embedding(args.vocab_size, args.d_model)
+        self.layers = nn.ModuleList([MambaBlock(args) for _ in range(args.n_layers)])  
+        self.norm = RMSNorm(args.d_model)
+        self.lm_head = nn.Linear(args.d_model, args.vocab_size, bias=False)
+        self.lm_head.weight = self.embedding.weight
 
+    def forward(self, x):
+        x = self.embedding(x)
+        for layer in self.layers:
+            x = layer(x)
+        x = self.norm(x)
+        return self.lm_head(x)
+
+class MambaBlock(nn.Module):
+    pass
+
+class RMSNorm(nn.Module):
+    pass
 
 
 
