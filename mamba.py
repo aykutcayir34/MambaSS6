@@ -15,15 +15,15 @@ from transformers import AutoTokenizer
 
 @dataclass
 class ModelArgs:
-    d_model: int,
-    n_layers: int,
-    vocab_size: int,
-    d_state: int = 16,
-    expand: int = 4,
-    dt_rank: Union[int, str] = "auto",
-    d_conv:int = 4,
-    pad_vocab_size_multiple: int = 8,
-    conv_bias: bool = True,
+    d_model: int
+    n_layers: int
+    vocab_size: int
+    d_state: int = 16
+    expand: int = 4
+    dt_rank: Union[int, str] = "auto"
+    d_conv:int = 4
+    pad_vocab_size_multiple: int = 8
+    conv_bias: bool = True
     bias: bool = False
     def __post_init__(self):
         self.d_inner = int(self.d_model * self.expand)
